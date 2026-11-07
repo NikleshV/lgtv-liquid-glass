@@ -1,0 +1,710 @@
+/*
+ * Liquid Glass Home for LG webOS (QNED83SRA)
+ * Crafted for 1920x1080 60fps TV rendering with GPU-accelerated transforms,
+ * specular frosted rims, dynamic ambient backlight crossfades, and Outfit typography.
+ */
+
+@font-face {
+  font-family: 'Outfit';
+  src: url('fonts/outfit-300.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('fonts/outfit-400.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('fonts/outfit-500.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Outfit';
+  src: url('fonts/outfit-700.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background-color: #060813;
+  color: #ffffff;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Responsive scaling when previewed in desktop browser window */
+@media screen and (max-width: 1919px) {
+  html {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #020308;
+  }
+  body {
+    transform-origin: center center;
+  }
+}
+
+.lg-surface {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background-color: #060813;
+}
+
+/* ---- Wallpaper & Ambient Backlight Layers ---- */
+
+.wallpaper-layer {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: opacity 0.85s ease, background-image 0.85s ease;
+  z-index: 1;
+}
+
+.wallpaper-scrim {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 25%, rgba(8, 11, 24, 0.22) 0%, rgba(5, 7, 16, 0.72) 70%, rgba(4, 6, 14, 0.92) 100%),
+              linear-gradient(180deg, rgba(6, 8, 19, 0.45) 0%, rgba(6, 8, 19, 0.18) 45%, rgba(6, 8, 19, 0.86) 100%);
+  z-index: 2;
+}
+
+.ambient-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* ---- Top Bar (Clock/Greeting + Frosted Liquid Glass Pills) ---- */
+
+.top-bar {
+  position: absolute;
+  top: 48px;
+  left: 96px;
+  right: 96px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 20;
+  transition: opacity 0.36s cubic-bezier(0.22, 1, 0.36, 1), transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.top-bar.scrolled-away {
+  opacity: 0;
+  transform: translate3d(0, -28px, 0);
+  pointer-events: none;
+}
+
+.top-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.greeting-text {
+  font-size: 21px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.72);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.clock-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.clock-time {
+  font-size: 54px;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #ffffff;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.clock-period {
+  font-size: 20px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.68);
+  letter-spacing: 0.04em;
+}
+
+.pill-divider {
+  display: inline-block;
+  width: 1px;
+  height: 22px;
+  background: rgba(255, 255, 255, 0.26);
+  margin: 0 6px;
+  align-self: center;
+}
+
+.clock-date {
+  font-size: 22px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+.top-pills {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.glass-pill {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.04) 55%, rgba(255, 255, 255, 0.08) 100%);
+  background-color: rgba(255, 255, 255, 0.11);
+  border-radius: 999px;
+  height: 54px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.22s ease, color 0.22s ease, border-color 0.22s ease, box-shadow 0.24s ease;
+}
+
+.glass-pill .pill-icon {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.glass-pill .pill-sub {
+  font-weight: 400;
+  opacity: 0.78;
+  font-size: 18px;
+}
+
+.glass-pill.is-focused {
+  background-color: rgba(255, 255, 255, 0.92);
+  color: #080b16;
+  border-color: #ffffff;
+  transform: scale(1.07);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.42), 0 0 22px rgba(190, 215, 255, 0.45);
+}
+
+/* ---- Hero Spotlight Shelf (Above Dock) ---- */
+
+.hero-spotlight {
+  position: absolute;
+  left: 104px;
+  right: 104px;
+  top: 250px;
+  height: 260px;
+  display: flex;
+  align-items: flex-end;
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.38s cubic-bezier(0.22, 1, 0.36, 1), transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hero-spotlight.hidden-shelf {
+  opacity: 0;
+  transform: translate3d(0, -24px, 0);
+}
+
+.hero-content {
+  max-width: 1050px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hero-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 15px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.hero-hint {
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.54);
+}
+
+.hero-title {
+  font-size: 74px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  color: #ffffff;
+  text-shadow: 0 6px 28px rgba(0, 0, 0, 0.55);
+}
+
+.hero-subtitle {
+  font-size: 24px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.78);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.45);
+  max-width: 880px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- Main Viewport, Liquid Glass Dock Band & App Grid ---- */
+
+.viewport {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  overflow: hidden;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+  transition: transform 0.42s cubic-bezier(0.20, 0.92, 0.26, 1);
+}
+
+/* Frosted Liquid Glass Dock Band */
+.dock-band {
+  position: absolute;
+  border-radius: 38px;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.20) 0%, rgba(255, 255, 255, 0.06) 55%, rgba(255, 255, 255, 0.12) 100%);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  pointer-events: none;
+  transition: all 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tiles-container {
+  position: absolute;
+  inset: 0;
+}
+
+.tile-item {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+  transition: left 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              top 0.34s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.38s ease,
+              transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  cursor: pointer;
+}
+
+.tile-item.shown {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.tile-card {
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.24), 0 12px 28px rgba(0, 0, 0, 0.38);
+  transition: transform 0.28s cubic-bezier(0.20, 0.92, 0.26, 1), box-shadow 0.28s ease;
+}
+
+/* Specular Liquid Glass sheen on top of every app tile */
+.tile-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 28px;
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.30) 0%, rgba(255, 255, 255, 0.05) 38%, rgba(255, 255, 255, 0) 60%, rgba(255, 255, 255, 0.10) 100%);
+  pointer-events: none;
+}
+
+.tile-card img {
+  max-width: 72%;
+  max-height: 72%;
+  object-fit: contain;
+  border-radius: 16px;
+  z-index: 2;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28));
+}
+
+.tile-card.full-bleed img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 28px;
+}
+
+.tile-monogram {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  z-index: 2;
+  text-align: center;
+  padding: 12px;
+}
+
+.tile-monogram-logo {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.tile-label {
+  margin-top: 14px;
+  font-size: 20px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  opacity: 0.72;
+  transition: opacity 0.24s ease, transform 0.24s ease, color 0.24s ease;
+}
+
+.tile-item.is-dock .tile-label {
+  opacity: 0;
+}
+
+.tile-item.is-focused.is-dock .tile-label {
+  opacity: 0.95;
+  transform: translate3d(0, 6px, 0);
+}
+
+.tile-item.is-focused .tile-card {
+  transform: scale(1.09);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.52);
+}
+
+.tile-item.is-focused .tile-label {
+  opacity: 1;
+  color: #ffffff;
+  transform: translate3d(0, 6px, 0);
+}
+
+/* Reorder / Move Wiggle State */
+@keyframes tileWiggle {
+  0%, 100% { transform: rotate(-1.4deg) scale(1.11); }
+  50% { transform: rotate(1.4deg) scale(1.11); }
+}
+
+.tile-item.is-moving .tile-card {
+  animation: tileWiggle 0.34s infinite ease-in-out;
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.68), 0 0 0 3px #ffffff;
+}
+
+/* Travelling Floating Liquid Glass Focus Frame */
+.glass-focus {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 34px;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.44) 0%, rgba(255, 255, 255, 0.08) 32%, rgba(255, 255, 255, 0.03) 72%, rgba(255, 255, 255, 0.20) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.82);
+  box-shadow: 0 16px 38px rgba(0, 0, 0, 0.42), 0 0 28px 4px rgba(185, 215, 255, 0.34);
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform, width, height, opacity;
+  transition: transform 0.28s cubic-bezier(0.20, 0.92, 0.26, 1),
+              width 0.28s cubic-bezier(0.20, 0.92, 0.26, 1),
+              height 0.28s cubic-bezier(0.20, 0.92, 0.26, 1),
+              opacity 0.22s ease;
+  z-index: 15;
+}
+
+.glass-focus.visible {
+  opacity: 1;
+}
+
+/* ---- Modal Panels (Inputs, Appearance, Settings & Debloat, App Library) ---- */
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 15, 0.76);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  opacity: 1;
+  transition: opacity 0.24s ease;
+}
+
+.modal-backdrop.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.modal-card {
+  width: 1180px;
+  max-height: 820px;
+  border-radius: 36px;
+  background-image: linear-gradient(180deg, rgba(34, 40, 68, 0.94) 0%, rgba(16, 19, 34, 0.97) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  padding: 42px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  padding-bottom: 20px;
+}
+
+.modal-title {
+  font-size: 36px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.modal-subtitle {
+  font-size: 19px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.68);
+  margin-top: 4px;
+}
+
+.modal-close-hint {
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  max-height: 620px;
+  padding-right: 8px;
+}
+
+.modal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 26px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.modal-row-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modal-row-title {
+  font-size: 23px;
+  font-weight: 500;
+}
+
+.modal-row-desc {
+  font-size: 17px;
+  font-weight: 300;
+  opacity: 0.72;
+}
+
+.modal-row-badge {
+  font-size: 17px;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.modal-row.is-focused {
+  background: rgba(255, 255, 255, 0.92);
+  color: #080b16;
+  border-color: #ffffff;
+  transform: scale(1.015);
+}
+
+.modal-row.is-focused .modal-row-badge {
+  background: rgba(8, 11, 22, 0.12);
+  color: #080b16;
+}
+
+/* Context Menu (Hold OK on tile) */
+.context-card {
+  width: 560px;
+  border-radius: 32px;
+  background-image: linear-gradient(180deg, rgba(36, 42, 72, 0.95) 0%, rgba(18, 21, 38, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.65);
+  padding: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.context-title {
+  font-size: 28px;
+  font-weight: 500;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.context-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ---- QNED / OLED Burn-In Safe Drifting Clock Screensaver ---- */
+
+.screensaver-overlay {
+  position: absolute;
+  inset: 0;
+  background: #000000;
+  z-index: 90;
+  overflow: hidden;
+  transition: opacity 0.65s ease;
+}
+
+.screensaver-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.screensaver-glow {
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.32;
+  pointer-events: none;
+  transition: transform 8s ease-in-out, background 2s ease;
+}
+
+.screensaver-drifter {
+  position: absolute;
+  top: 38%;
+  left: 36%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  transition: transform 9s ease-in-out;
+}
+
+.ss-time {
+  font-size: 136px;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 8px 36px rgba(0, 0, 0, 0.7);
+}
+
+.ss-date {
+  font-size: 28px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.64);
+}
+
+.ss-weather {
+  margin-top: 6px;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ---- Toast Notification ---- */
+
+.toast {
+  position: absolute;
+  bottom: 48px;
+  left: 50%;
+  transform: translate3d(-50%, 24px, 0);
+  padding: 16px 32px;
+  border-radius: 999px;
+  background: rgba(20, 24, 42, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.26s ease, transform 0.26s ease;
+  z-index: 100;
+}
+
+.toast.shown {
+  opacity: 1;
+  transform: translate3d(-50%, 0, 0);
+}

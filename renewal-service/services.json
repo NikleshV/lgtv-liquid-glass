@@ -1,0 +1,1 @@
+{"id":"com.gathin.tvhome.renewal","description":"Home utilities: opt-in Developer Mode renewal and temporary theme reception","services":[{"name":"com.gathin.tvhome.renewal"}],"requiredACG":["activity.operation"]}

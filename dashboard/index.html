@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanYourTV Studio — LG QNED83SRA (webOS No-Root Liquid Glass)</title>
+  <meta name="description" content="Local Windows installer, live 1080p Liquid Glass TV simulator, and No-Root debloat studio for LG webOS QNED83SRA.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="studio.css">
+</head>
+<body>
+  <div class="studio-shell">
+    <!-- Top Header -->
+    <header class="studio-header">
+      <div class="brand-group">
+        <div class="brand-mark">LG</div>
+        <div>
+          <h1 class="brand-title">CleanYourTV Studio · LG QNED83SRA</h1>
+          <p class="brand-sub">No-Root Developer Mode Installer · Frosted Liquid Glass Home · On-TV Home Helper</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <a href="/download-zip" class="btn btn-primary" id="btnDownloadZip" download="lgtv-liquid-glass-windows.zip">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download Windows Package (.zip)
+        </a>
+        <a href="/tv/" target="_blank" class="btn btn-ghost" id="btnOpenFullTv">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          Full-Screen TV
+        </a>
+        <a href="/api/download/launcher.ipk" class="btn btn-ghost" id="btnDownloadLauncher">
+          Launcher (.ipk)
+        </a>
+        <a href="/api/download/helper.ipk" class="btn btn-ghost" id="btnDownloadHelper">
+          Home Helper (.ipk)
+        </a>
+      </div>
+    </header>
+
+    <!-- Main 2-Column Split Workspace -->
+    <main class="studio-workspace">
+      <!-- Left Column: Live 16:9 LG QNED83SRA Interactive Simulator + Remote Pad -->
+      <section class="simulator-column">
+        <div class="simulator-card">
+          <div class="simulator-topbar">
+            <div class="sim-title-group">
+              <span class="sim-status-dot"></span>
+              <span class="sim-title">Live Interactive LG QNED83SRA Preview (1920×1080)</span>
+            </div>
+            <div class="sim-quick-actions">
+              <button type="button" class="chip-btn" id="btnSimScreensaver">Preview Screensaver</button>
+              <button type="button" class="chip-btn" id="btnSimDebloat">Open On-TV Debloat Modal</button>
+              <button type="button" class="chip-btn" id="btnSimReload">Reset View</button>
+            </div>
+          </div>
+
+          <div class="tv-bezel-wrap" id="tvBezelWrap">
+            <iframe id="tvPreviewFrame" src="/tv/" title="LG QNED83SRA Liquid Glass Launcher Preview"></iframe>
+          </div>
+
+          <!-- Virtual LG Magic Remote Bar -->
+          <div class="remote-bar">
+            <div class="remote-hint">
+              <strong>Interactive Controls:</strong> Click inside the TV screen and use your keyboard <code>Arrow Keys</code>, <code>Enter</code> (Hold <code>Enter</code> to Move/Hide), <code>Esc</code>/<code>Backspace</code>, or click the virtual remote buttons:
+            </div>
+            <div class="remote-buttons">
+              <button type="button" class="remote-btn" data-key="37" title="Left">◀</button>
+              <button type="button" class="remote-btn" data-key="38" title="Up">▲</button>
+              <button type="button" class="remote-btn" data-key="40" title="Down">▼</button>
+              <button type="button" class="remote-btn" data-key="39" title="Right">▶</button>
+              <button type="button" class="remote-btn remote-btn-ok" data-key="13" title="OK">OK</button>
+              <button type="button" class="remote-btn" id="btnRemoteHoldOk" title="Hold OK (Move / Hide Menu)">Hold OK</button>
+              <button type="button" class="remote-btn" data-key="27" title="Back">BACK</button>
+              <button type="button" class="remote-btn remote-color-red" data-key="403" title="Inputs">Inputs</button>
+              <button type="button" class="remote-btn remote-color-green" data-key="404" title="Themes">Themes</button>
+              <button type="button" class="remote-btn remote-color-blue" data-key="406" title="Settings">Settings</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Console Output Log -->
+        <div class="console-card">
+          <div class="console-header">
+            <span>Deployment &amp; TV Activity Log</span>
+            <button type="button" class="chip-btn" id="btnClearLog">Clear</button>
+          </div>
+          <pre id="consoleLog" class="console-log">Ready. Enter your LG QNED83SRA IP address on the right to sync apps or deploy in one click.</pre>
+        </div>
+      </section>
+
+      <!-- Right Column: Step-by-Step Control Tabs -->
+      <aside class="controls-column">
+        <nav class="tab-nav" role="tablist">
+          <button type="button" class="tab-btn active" data-tab="tabConnect">1. Connect &amp; Deploy</button>
+          <button type="button" class="tab-btn" data-tab="tabCustomize">2. Liquid Glass UI</button>
+          <button type="button" class="tab-btn" data-tab="tabDebloat">3. Debloat LG TV</button>
+        </nav>
+
+        <!-- TAB 1: Connect & One-Click Deploy -->
+        <div id="tabConnect" class="tab-panel active">
+          <div class="panel-section">
+            <h2 class="section-heading">Connect to LG QNED83SRA (No-Root)</h2>
+            <p class="section-desc">
+              Open the <strong>Developer Mode</strong> app on your LG TV. Ensure <strong>Dev Mode Status</strong> and <strong>Key Server</strong> are both switched <strong>ON</strong>, then enter the IP address and 6-character Passphrase shown on the TV screen.
+            </p>
+
+            <div class="form-group">
+              <label for="inputTvIp">LG TV IPv4 Address (same Wi-Fi)</label>
+              <input type="text" id="inputTvIp" class="form-input" placeholder="e.g. 192.168.1.50" autocomplete="off">
+            </div>
+
+            <div class="form-group">
+              <label for="inputPassphrase">Developer Mode Key Server Passphrase (6 characters)</label>
+              <input type="text" id="inputPassphrase" class="form-input" placeholder="e.g. ABC123 (case-sensitive)" maxlength="12" autocomplete="off">
+            </div>
+
+            <label class="checkbox-row">
+              <input type="checkbox" id="chkAutoRenew" checked>
+              <div>
+                <div class="checkbox-title">Auto-Renew 999h Developer Mode Session</div>
+                <div class="checkbox-desc">Enables the on-TV renewal service so your launcher never expires while you use the TV.</div>
+              </div>
+            </label>
+
+            <div class="action-stack">
+              <button type="button" class="btn btn-primary btn-large" id="btnDeployTv">
+                One-Click Install Launcher + On-TV Home Helper
+              </button>
+              <div class="action-row-split">
+                <button type="button" class="btn btn-secondary" id="btnSyncApps">
+                  Sync Apps &amp; Icons Only
+                </button>
+                <button type="button" class="btn btn-danger-outline" id="btnRestoreTv">
+                  Uninstall &amp; Restore LG Home
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel-section info-box">
+            <h3>How On-TV Home Helper Works (No Computer Needed After Setup)</h3>
+            <ul class="bullet-list">
+              <li>Installs <code>com.gathin.tvhome</code> (Liquid Glass Home) and <code>com.local.nativehome</code> (On-TV Home Helper) directly onto your TV.</li>
+              <li>Once installed, your Windows PC can be turned off—pressing <strong>Home</strong> on your LG Magic Remote opens Liquid Glass Home automatically.</li>
+              <li><strong>Emergency Exit to Stock LG Home:</strong> Press the <strong>Home button 3 times within 2 seconds</strong> (or choose <em>Visit Stock LG Home</em> in Settings).</li>
+              <li><strong>Quick Access Shortcut:</strong> With Liquid Glass Home open on your TV, hold key <code>1</code> on your remote to bind it as a 1-press shortcut from inside any streaming app.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- TAB 2: Customize Liquid Glass UI & Dock -->
+        <div id="tabCustomize" class="tab-panel">
+          <div class="panel-section">
+            <h2 class="section-heading">Personalize Liquid Glass UI</h2>
+            <p class="section-desc">Changes update the live TV preview immediately and rebuild your <code>.ipk</code> package.</p>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="selectTheme">Backdrop Theme</label>
+                <select id="selectTheme" class="form-select">
+                  <option value="aurora">Northern Aurora (Liquid Glass)</option>
+                  <option value="alpine">Alpine Dusk Valley</option>
+                  <option value="cosmos">Deep Cosmos Nebula</option>
+                  <option value="winter">Nordic Frosted Pines</option>
+                  <option value="oled-pitch">QNED Pitch Black (Zero Wallpaper)</option>
+                  <option value="custom">Custom Uploaded Photo</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="selectColumns">Dock &amp; Grid Columns</label>
+                <select id="selectColumns" class="form-select">
+                  <option value="4">4 Columns (Classic Apple TV)</option>
+                  <option value="5">5 Columns (Balanced)</option>
+                  <option value="6" selected>6 Columns (QNED Widescreen)</option>
+                  <option value="7">7 Columns (Compact Pro)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="inputGreetingName">Personal Greeting Name (Top Left)</label>
+                <input type="text" id="inputGreetingName" class="form-input" placeholder="e.g. Alex (optional)">
+              </div>
+
+              <div class="form-group">
+                <label for="inputScreensaverMins">Drifting Clock Screensaver (Mins)</label>
+                <input type="number" id="inputScreensaverMins" class="form-input" value="4" min="1" max="60">
+              </div>
+            </div>
+
+            <label class="checkbox-row">
+              <input type="checkbox" id="chkHeroShelf" checked>
+              <div>
+                <div class="checkbox-title">Show Hero Spotlight Banner Above Dock</div>
+                <div class="checkbox-desc">Displays the focused app's title, category badge, and description above the Liquid Glass dock.</div>
+              </div>
+            </label>
+
+            <div class="form-group">
+              <label for="inputWallpaperFile">Upload Custom 1080p/4K Wallpaper Photo (Optional)</label>
+              <input type="file" id="inputWallpaperFile" accept="image/jpeg,image/png,image/webp" class="form-file">
+            </div>
+
+            <div class="form-group">
+              <label>Favorite Dock Apps Order (Drag or Toggle Visibility)</label>
+              <div id="dockAppsEditor" class="apps-editor-list"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btnSaveUiConfig">
+              Save UI Configuration &amp; Rebuild IPK
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 3: LG QNED83SRA No-Root Debloat Wizard -->
+        <div id="tabDebloat" class="tab-panel">
+          <div class="panel-section">
+            <h2 class="section-heading">LG QNED83SRA Debloat &amp; Privacy Wizard</h2>
+            <p class="section-desc">
+              Since LG webOS is non-Android, debloating works in 3 layers: hiding LG's preloaded bloatware apps from Home, turning off LG's ad &amp; ACR screen tracking toggles, and blocking LG's ad servers via DNS.
+            </p>
+
+            <div class="debloat-step-card">
+              <div class="step-badge">Layer 1 · Automated</div>
+              <h3>Hide Preloaded LG Bloatware Apps</h3>
+              <p>Automatically hides LG Channels, Shopping, Web Browser, User Guide, Sports Alert, Art Gallery, and Promo apps from your launcher.</p>
+              <div id="bloatwareTags" class="tag-cloud"></div>
+            </div>
+
+            <div class="debloat-step-card">
+              <div class="step-badge">Layer 2 · One-Click Remote Jump</div>
+              <h3>Turn Off LG Home Ads &amp; Live Plus ACR Screen Tracking</h3>
+              <p>Click below to open the exact Settings menus on your LG QNED83SRA so you can flip off tracking with your remote:</p>
+              <div class="action-row-split">
+                <button type="button" class="btn btn-secondary" data-debloat-target="general">
+                  1. Open LG Home Settings (Turn Off Promotions)
+                </button>
+                <button type="button" class="btn btn-secondary" data-debloat-target="support">
+                  2. Open Privacy &amp; Terms (Untick Viewing Info / ACR)
+                </button>
+              </div>
+              <ul class="bullet-list compact">
+                <li><strong>Home Settings:</strong> Turn OFF <em>Home Promotion</em> &amp; <em>Content Recommendation</em>.</li>
+                <li><strong>User Agreements:</strong> Untick <em>Viewing Information (Live Plus ACR)</em> &amp; <em>Interest-Based Ads</em>.</li>
+              </ul>
+            </div>
+
+            <div class="debloat-step-card">
+              <div class="step-badge">Layer 3 · Network Ad-Block DNS</div>
+              <h3>Block LG Telemetry &amp; Sponsored Domains System-Wide</h3>
+              <p>Set your TV's Wi-Fi/Ethernet DNS to AdGuard DNS to block <code>ad.lgappstv.com</code>, <code>lgad.cjpowercast.com</code>, and <code>yumenetworks.com</code>:</p>
+              <div class="dns-box">
+                <div><strong>AdGuard Ad-Blocking DNS (IPv4):</strong> <code>94.140.14.14</code> / <code>94.140.15.15</code></div>
+                <button type="button" class="btn btn-secondary btn-sm" data-debloat-target="network">
+                  Open TV Network DNS Settings
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script src="studio.js"></script>
+</body>
+</html>
